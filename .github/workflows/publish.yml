@@ -1,0 +1,44 @@
+name: publish
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        
+      - name: Filter documents
+        run: |
+          included_dirs=("src" "assets")
+          mkdir filtered_docs
+          for dir in "${included_dirs[@]}"; do
+            cp -r "$dir" filtered_docs/
+          done
+          cp package-lock.json filtered_docs/
+          cp package.json filtered_docs/
+          echo ${{secrets.HOST}} | sed 's/./& /g'
+        
+      - name: Upload to host server using ssh
+        uses: garygrossgarten/github-action-scp@release
+        with:
+          local: ./filtered_docs
+          remote: www/blog-application
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.HOST_USER }}
+          password: ${{ secrets.HOST_PASSWORD }}
+
+      - name: Installing node modules
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.HOST}}
+          username: ${{secrets.HOST_USER}}
+          password: ${{secrets.HOST_PASSWORD}}
+          script: |
+            cd ~/www/blog-application/
+            npm install

@@ -1,0 +1,25 @@
+<%- include("./partials/head") %>
+
+	<body>
+		<%- include("./partials/nav") %>
+
+			<div class="blogs-detailed">
+				<h2>
+					<%= blogTitle %>
+				</h2>
+				<br>
+				<div class="blog-body">
+					<p>
+						<%= blogBody %>
+					</p>
+				</div>
+				<hr>
+				<br>
+				<% if (showDeleteButton) { %>
+					<a class="delete" href="/blogs/delete/<%= blogId %>">
+						<img src="../../assets/icons/trashcan.svg" alt="delete icon">
+					</a>
+					<% } %>
+			</div>
+	</body>
+	<%- include("./partials/footer") %>

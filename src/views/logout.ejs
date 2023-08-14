@@ -1,0 +1,19 @@
+<%- include("./partials/head") %>
+
+	<body>
+		<%- include("./partials/nav") %>
+			<% if (user) { %>
+				<div class="action-block">
+					<form action="/auth/logout" method="post">
+						<h2>Do you want to logout?</h2>
+
+						<button>Logout</button>
+						<a href="/">Go back</a>
+					</form>
+				</div>
+				<% } else { %>
+					<h2>You are not logged in! <a href="/auth/login">Login</a> or <a href="/auth/signup">signup</a>
+						please.</h2>
+					<% } %>
+	</body>
+	<%- include("./partials/footer") %>

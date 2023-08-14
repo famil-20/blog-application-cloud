@@ -1,0 +1,13 @@
+<%- include("./partials/head") %>
+
+	<body>
+		<%- include("./partials/nav") %>
+
+			<% if (user) { %>
+				<h2>Please navigate to <a href="/blogs">Blogs</a> to see the list of contents</h2>
+				<% } else { %>
+					<h2>Please <a href="/auth/login">login</a> or <a href="/auth/signup">sign up</a> to see the
+						available contents or create your own</h2>
+					<% } %>
+	</body>
+	<%- include("./partials/footer") %>

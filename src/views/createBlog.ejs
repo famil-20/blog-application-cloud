@@ -1,0 +1,66 @@
+<%- include("./partials/head") %>
+
+    <body>
+        <%- include("./partials/nav") %>
+
+            <div class="action-block">
+                <form>
+                    <label for="title">Blog title:</label>
+                    <input type="text" id="title" name="title" required>
+                    <div class="title error"></div>
+
+                    <label for="snippet">Blog snippet:</label>
+                    <input type="text" id="snippet" name="snippet" required>
+                    <div class="snippet error"></div>
+
+                    <label for="body">Blog body:</label>
+                    <textarea id="body" name="body" required></textarea>
+                    <div class="body error"></div>
+
+                    <button>Submit</button>
+                    <a href="/blogs">Go back</a>
+                </form>
+            </div>
+
+            <script>
+                const form = document.querySelector('form');
+                const titleError = document.querySelector('.title.error');
+                const snippetError = document.querySelector('.snippet.error');
+                const bodyError = document.querySelector('.body.error');
+
+                form.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+
+                    // reset errors
+                    titleError.textContent = '';
+                    snippetError.textContent = '';
+                    bodyError.textContent = '';
+
+                    const title = form.title.value;
+                    const snippet = form.snippet.value;
+                    const body = form.body.value;
+
+                    try {
+                        const res = await fetch('/blogs/create', {
+                            method: 'POST',
+                            body: JSON.stringify({ title, snippet, body }),
+                            headers: { 'Content-Type': 'application/json' }
+                        });
+                        const data = await res.json();
+                        if (data.errors) {
+                            titleError.textContent = data.errors.title;
+                            snippetError.textContent = data.errors.snippet;
+                            bodyError.textContent = data.errors.body;
+                        }
+                        else if (data.blog) {
+                            location.assign('/blogs');
+                        }
+                    }
+                    catch (err) {
+                        console.log(err);
+                    }
+                });
+            </script>
+
+    </body>
+    <%- include("./partials/footer") %>
